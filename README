@@ -1,0 +1,3 @@
+usage:
+if we want to display 10*10*10 spheres
+./sphere 10
