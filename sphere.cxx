@@ -64,11 +64,12 @@ int main(int argc, char ** argv)
         vtkPolyDataMapper* mapper = vtkPolyDataMapper::New();
         mapper->SetInput(polydata);
         mapper->Update();
-
+        
         vtkActor* actor = vtkActor::New();
         actor->SetMapper(mapper);
         actors.push_back(actor);
-        mapper->Delete();
+   // we delete it when we delete the actor
+   //     mapper->Delete();
 
         renderer->AddActor(actor);
         }
@@ -79,7 +80,7 @@ int main(int argc, char ** argv)
 
   // render and start interaction so we can check status of memory
   renderWindow->Render();
-  renderWindowInteractor->Start();
+ // renderWindowInteractor->Start();
 
   // remove actors from visu
   std::list<vtkActor*>::iterator actor_iterator = actors.begin();
@@ -91,14 +92,19 @@ int main(int argc, char ** argv)
     }
 
   // delete actors and polydatas
-  std::list<vtkPolyData*>::iterator poly_iterator = polydatas.begin();
   actor_iterator = actors.begin();
+  std::list<vtkPolyData*>::iterator poly_iterator = polydatas.begin();
 
   while( poly_iterator != polydatas.end() )
     {
-    (*poly_iterator)->Delete();
+    vtkPolyDataMapper* test = static_cast<vtkPolyDataMapper*>((*actor_iterator)->GetMapper());
+    test->Delete();
+    //std::cout << "actor ref count: " << (*actor_iterator)->GetReferenceCount() << std::endl;;
     (*actor_iterator)->Delete();
-
+    //std::cout << "delete actor ref count: " << (*actor_iterator)->GetReferenceCount() << std::endl;;
+    (*poly_iterator)->Delete();
+    std::cout << "delete poly ref count: " << (*poly_iterator)->GetReferenceCount() << std::endl;;
+    
     ++poly_iterator;
     ++actor_iterator;
     }
