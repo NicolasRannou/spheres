@@ -77,6 +77,7 @@ int main(int argc, char ** argv)
     }
 
   sphereSource->Delete();
+  std::cout << "delete sphere source ref count: " << sphereSource->GetReferenceCount() << std::endl;;
 
   // render and start interaction so we can check status of memory
   renderWindow->Render();
@@ -99,7 +100,9 @@ int main(int argc, char ** argv)
   while( poly_iterator != polydatas.end() )
     {
     (*actor_iterator)->Delete();
+    std::cout << "delete actor ref count: " << (*actor_iterator)->GetReferenceCount() << std::endl;;
     (*map_iterator)->Delete();
+    std::cout << "delete map ref count: " << (*map_iterator)->GetReferenceCount() << std::endl;;
     (*poly_iterator)->Delete();
     std::cout << "delete poly ref count: " << (*poly_iterator)->GetReferenceCount() << std::endl;;
     
